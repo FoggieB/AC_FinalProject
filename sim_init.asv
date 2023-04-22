@@ -1,0 +1,18 @@
+% sim setup
+
+Iw = 3;
+Ic = 30;
+m = 80;
+r = 3;
+R = 15;
+
+wdot0 = 1;
+psi0 = 1;
+
+
+A = [0 0; 0 0];
+B = [r*Iw/(m*r) 0; Iw*R*psi0/Ic Iw*R*wdot0/Ic];
+C = [1 ];
+D = 0;
+
+lyap(A,B,C)

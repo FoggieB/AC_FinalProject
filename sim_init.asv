@@ -1,18 +1,53 @@
-% sim setup
+% car sim setup
 
+% steering model
+ws = 10;
+zetas = 0.7;
+
+% throttle model
+
+wt = 1;
+zetat = 0.7;
+
+%sim setup
 Iw = 3;
 Ic = 30;
 m = 80;
 r = 3;
 R = 15;
+wheel_damp = 1;
+turn_damp = 1;
 
-wdot0 = 1;
-psi0 = 1;
+wdot0 = u(1); %have to
+psi0 = u(2);
 
 
-A = [0 0; 0 0];
-B = [r*Iw/(m*r) 0; Iw*R*psi0/Ic Iw*R*wdot0/Ic];
-C = [1 ];
-D = 0;
+Ap = [0 1 0; 0 -wheel_damp 0; 0 0 -turn_damp];
+Bp = [0 0; r*Iw/(m*r) 0; Iw*R*psi0/Ic Iw*R*wdot0/Ic];
+lambda = [1 0; 0 1];
+Cp =  [0 1 0;0 0 1]; 
+Dp = [1 0; 0 1];
+A = [0 Cp;...
+     zeros(2,1) Ap];
+B = [0;...
+     Bp];
+C = [0 Cp];
+D=0;
+Q = diag([10000 0 10000]);
+R = 10;
+Kxt = lqr(A,B,Q,R);
+Aref = A-B*Kxt;
+Cref = C;
+Bref = [-eye(1);zeros(2,1)];
+Gamau = 80;
+Qref = diag([1 0 0]);
+Pref = lyap(Aref',Qref);
+e0 = .01;
 
-lyap(A,B,C)
+
+
+
+run('carSim')
+close all;
+
+

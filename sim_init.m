@@ -18,7 +18,7 @@ R = 15;
 wheel_damp = 1;
 turn_damp = 1;
 
-wdot0 = -2; %have to make a constant to get reference model
+wdot0 = 2; %have to make a constant to get reference model
 psi0 = 2;  %have to make a constant to get reference model
 
 %base model
@@ -37,14 +37,13 @@ B = [Dp;...
      Bp];
 C = [zeros(2,2) Cp];
 D=Dp;
-Q = diag([1 1 1 1 1]);
-R = diag([1 1]);
+Q = diag([1000 1000 1 1 1]);
+R = diag([10 10]);
 Kxt = lqr(A,B,Q,R);
 Aref = A-B*Kxt;
-Cref = C;
+Cref = C-D*Kxt;
 Bref = [-eye(2);zeros(3,2)];
-Gamau = 500;
-Qref = diag([1 1 1 1 1]);
+Qref = diag([10000 100 1 100 100]);
 Pref = lyap(Aref',Qref);
 
 run('carSim')

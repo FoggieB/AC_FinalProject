@@ -18,34 +18,33 @@ R = 15;
 wheel_damp = 1;
 turn_damp = 1;
 
-wdot0 = u(1); %have to
-psi0 = u(2);
+wdot0 = 2; %have to make a constant to get reference model
+psi0 = 2;  %have to make a constant to get reference model
 
+%base model
 
 Ap = [0 1 0; 0 -wheel_damp 0; 0 0 -turn_damp];
 Bp = [0 0; r*Iw/(m*r) 0; Iw*R*psi0/Ic Iw*R*wdot0/Ic];
-lambda = [1 0; 0 1];
 Cp =  [0 1 0;0 0 1]; 
 Dp = [1 0; 0 1];
-A = [0 Cp;...
-     zeros(2,1) Ap];
-B = [0;...
+lambda = [1 0; 0 1];
+
+%extended model
+
+A = [zeros(2,2) Cp;...
+     zeros(3,2) Ap];
+B = [Dp;...
      Bp];
-C = [0 Cp];
-D=0;
-Q = diag([10000 0 10000]);
-R = 10;
+C = [zeros(2,2) Cp];
+D=Dp;
+Q = diag([1000 1000 1 1 1]);
+R = diag([10 10]);
 Kxt = lqr(A,B,Q,R);
 Aref = A-B*Kxt;
-Cref = C;
-Bref = [-eye(1);zeros(2,1)];
-Gamau = 80;
-Qref = diag([1 0 0]);
+Cref = C-D*Kxt;
+Bref = [-eye(2);zeros(3,2)];
+Qref = diag([10000 100 1 100000 1000]);
 Pref = lyap(Aref',Qref);
-e0 = .01;
-
-
-
 
 run('carSim')
 close all;

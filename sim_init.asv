@@ -43,9 +43,9 @@ Kxt = lqr(A,B,Q,R);
 Aref = A-B*Kxt;
 Cref = C-D*Kxt;
 Bref = [-eye(2);zeros(3,2)];
-Qref = diag([10000 100 0 100 100]);
+Qref = diag([10000 1 0 1000 100]);
 Pref = lyap(Aref',Qref);
-
+e0=.2
 run('carSim')
 close all;
 

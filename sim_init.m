@@ -45,7 +45,6 @@ Cref = C-D*Kxt;
 Bref = [-eye(2);zeros(3,2)];
 Qref = diag([10000 1 0 1000 100]);
 Pref = lyap(Aref',Qref);
-
 run('carSim')
 close all;
 

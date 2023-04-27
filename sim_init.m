@@ -37,8 +37,8 @@ B = [Dp;...
      Bp];
 C = [zeros(2,2) Cp];
 D=Dp;
-Q = diag([1000 1000 1 1 1]);
-R = diag([10 10]);
+Q = diag([100 10 1 1 10]);
+R = diag([1 1]);
 Kxt = lqr(A,B,Q,R);
 Aref = A-B*Kxt;
 Cref = C-D*Kxt;
